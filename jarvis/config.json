@@ -1,0 +1,308 @@
+{
+    "_comment": "JARVIS Configuration - 100% Personalized for YOUR Profile",
+    "_version": "1.0.0",
+    "_last_updated": "2025-02-12",
+
+    "user": {
+        "name": "Student",
+        "background": "biology_stream",
+        "exam": "Loyola Academy B.Sc CS",
+        "exam_date": "2025-05-15",
+        "target_score": 50,
+        "safe_score": 48,
+        "days_remaining": 75,
+        
+        "_comment_subjects": "Based on YOUR answers - Biology background, weak in Maths/Physics",
+        "subjects": {
+            "maths": {
+                "weightage": 20,
+                "strength": "weakest",
+                "target": 12,
+                "priority": 1,
+                "foundation_required": true,
+                "foundation_days": 9
+            },
+            "physics": {
+                "weightage": 15,
+                "strength": "second_weakest", 
+                "target": 10,
+                "priority": 2,
+                "foundation_required": true,
+                "foundation_days": 9
+            },
+            "chemistry": {
+                "weightage": 15,
+                "strength": "moderate",
+                "target": 11,
+                "priority": 3,
+                "biology_advantage": true,
+                "foundation_required": false
+            },
+            "english": {
+                "weightage": 10,
+                "strength": "third_weakest",
+                "target": 8,
+                "priority": 4,
+                "foundation_required": false
+            }
+        }
+    },
+
+    "study_plan": {
+        "_comment": "75-Day Crash Plan - 4 Phases",
+        "total_days": 75,
+        "daily_hours": 8,
+        "max_hours": 10,
+        
+        "phases": [
+            {
+                "name": "Foundation Rush",
+                "days": [1, 25],
+                "focus": "10th basics + 12th introduction",
+                "target_score": 25,
+                "mock_frequency": "weekly"
+            },
+            {
+                "name": "Intensive Practice",
+                "days": [26, 50],
+                "focus": "High-yield topics, 500+ questions",
+                "target_score": 40,
+                "mock_frequency": "twice_weekly"
+            },
+            {
+                "name": "Mock Marathon",
+                "days": [51, 70],
+                "focus": "20+ mock tests, speed building",
+                "target_score": 50,
+                "mock_frequency": "daily"
+            },
+            {
+                "name": "Final Revision",
+                "days": [71, 75],
+                "focus": "Formula revision, confidence",
+                "target_score": 50,
+                "mock_frequency": "daily"
+            }
+        ],
+
+        "daily_schedule": [
+            {"time": "07:00", "duration": 30, "activity": "wakeup_planning", "type": "prep"},
+            {"time": "07:30", "duration": 120, "activity": "maths", "type": "study", "reason": "peak_energy_for_hardest"},
+            {"time": "09:45", "duration": 120, "activity": "physics", "type": "study", "reason": "still_good_energy"},
+            {"time": "12:30", "duration": 60, "activity": "english", "type": "study", "reason": "low_energy_easy_subject"},
+            {"time": "13:30", "duration": 60, "activity": "chemistry", "type": "study", "reason": "medium_energy"},
+            {"time": "15:00", "duration": 120, "activity": "maths_practice", "type": "practice", "reason": "second_wind"},
+            {"time": "17:15", "duration": 120, "activity": "physics_practice", "type": "practice", "reason": "evening_peak"},
+            {"time": "20:00", "duration": 60, "activity": "revision", "type": "review", "reason": "daily_review"},
+            {"time": "21:00", "duration": 60, "activity": "mock_test", "type": "test", "reason": "test_skills"}
+        ]
+    },
+
+    "burnout_prevention": {
+        "_comment": "Anti-burnout protocol based on YOUR pattern",
+        "guilt_messaging": false,
+        "forward_looking_motivation": true,
+        
+        "missed_day_protocol": {
+            "enabled": true,
+            "target_reduction": 0.20,
+            "overcompensation_blocked": true,
+            "message_style": "neutral_recovery"
+        },
+        
+        "forced_breaks": [
+            {"after_days": 5, "type": "half_day", "hours": 4, "reason": "prevent_accumulated_fatigue"},
+            {"after_days": 10, "type": "full_rest", "hours": 0, "reason": "mandatory_recovery"}
+        ],
+        
+        "panic_detection": {
+            "enabled": true,
+            "no_progress_minutes": 180,
+            "response": "suggest_break_and_restart"
+        }
+    },
+
+    "distraction_blocking": {
+        "_comment": "Based on YOUR admitted distractions",
+        "root_required": true,
+        
+        "block_rules": {
+            "study_hours": {"start": "08:00", "end": "22:00"},
+            "free_hours": {"start": "22:00", "end": "23:00"},
+            "sleep_hours": {"start": "23:00", "end": "07:00"}
+        },
+        
+        "apps": {
+            "instagram": {
+                "severity": "high",
+                "study_hours": "blocked",
+                "free_hours": "allow_30min",
+                "sleep_hours": "blocked",
+                "package": "com.instagram.android"
+            },
+            "porn": {
+                "severity": "critical",
+                "study_hours": "blocked",
+                "free_hours": "blocked",
+                "sleep_hours": "blocked",
+                "method": "hosts_file",
+                "_comment": "PERMANENT block - no exceptions"
+            },
+            "youtube": {
+                "severity": "medium",
+                "study_hours": "educational_only",
+                "free_hours": "allow",
+                "sleep_hours": "blocked",
+                "package": "com.google.android.youtube",
+                "whitelist_mode": true
+            },
+            "games": {
+                "severity": "high",
+                "study_hours": "blocked",
+                "free_hours": "allow",
+                "sleep_hours": "blocked"
+            },
+            "music": {
+                "severity": "low",
+                "study_hours": "instrumental_only",
+                "free_hours": "allow",
+                "sleep_hours": "blocked"
+            }
+        },
+        
+        "adult_sites_blocklist": [
+            "_comment": "Will be populated in hosts file",
+            "method": "dns_and_hosts",
+            "update_frequency": "weekly"
+        ]
+    },
+
+    "psychological_engine": {
+        "_comment": "Based on YOUR preference: 8/10 AI control, strict system",
+        
+        "xp_system": {
+            "correct_answer": 10,
+            "wrong_with_review": 5,
+            "wrong_skip_review": 0,
+            "daily_goals_complete": 100,
+            "streak_per_day": 10,
+            "mock_test_complete": 100,
+            "topic_mastered": 200,
+            "achievement_unlock": [50, 500]
+        },
+        
+        "punishment": {
+            "skip_session": -50,
+            "skip_day": -100,
+            "skip_2_days": -200,
+            "porn_attempt": -200,
+            "streak_break_multiplier": 2.0
+        },
+        
+        "streak": {
+            "freeze_available": 3,
+            "freeze_per_month": 3,
+            "recovery_window_hours": 24
+        },
+        
+        "levels": [
+            {"level": 1, "title": "Beginner", "xp_required": 0},
+            {"level": 5, "title": "Learner", "xp_required": 2000},
+            {"level": 10, "title": "Student", "xp_required": 5000},
+            {"level": 15, "title": "Scholar", "xp_required": 10000},
+            {"level": 20, "title": "Master", "xp_required": 20000}
+        ],
+        
+        "messaging_style": {
+            "type": "factual_motivational",
+            "guilt_based": false,
+            "examples": {
+                "wrong": ["You're useless!", "Porn dekhne ka time hai?"],
+                "right": ["Maths score is 6/20. Let's work on Quadratic equations.", "Focus session active. Let's complete 5 questions."]
+            }
+        }
+    },
+
+    "ai_engine": {
+        "_comment": "Local AI configuration for offline operation",
+        "engine": "llama.cpp",
+        "model": "deepseek-r1-1.5b-q4_k_m",
+        "model_size_mb": 1070,
+        "context_length": 2048,
+        "temperature": 0.7,
+        "max_tokens": 512,
+        
+        "cache": {
+            "enabled": true,
+            "ttl_hours": 168,
+            "max_entries": 1000
+        },
+        
+        "question_generation": {
+            "prompt_template": "question_gen_template.txt",
+            "validation_enabled": true,
+            "max_retries": 3
+        }
+    },
+
+    "irt_settings": {
+        "_comment": "Item Response Theory parameters",
+        "model": "3PL",
+        "D_constant": 1.7,
+        "theta_range": [-3.0, 3.0],
+        "initial_theta": 0.0,
+        "stopping_rule": {
+            "min_questions": 10,
+            "max_questions": 30,
+            "standard_error_threshold": 0.3
+        },
+        "parameter_ranges": {
+            "a_discrimination": [0.5, 2.5],
+            "b_difficulty": [-3.0, 3.0],
+            "c_guessing": [0.2, 0.25]
+        }
+    },
+
+    "sm2_settings": {
+        "_comment": "Spaced Repetition SM-2 algorithm",
+        "default_ease_factor": 2.5,
+        "minimum_ease_factor": 1.3,
+        "quality_scale": {
+            "5": "perfect",
+            "4": "good",
+            "3": "pass",
+            "2": "fail_recognized",
+            "1": "fail_no_recall",
+            "0": "blackout"
+        },
+        "intervals": {
+            "first": 1,
+            "second_quality_ge_4": 6,
+            "second_quality_lt_4": 3
+        },
+        "retention_target": 0.9
+    },
+
+    "database": {
+        "type": "sqlite",
+        "path": "data/db/jarvis.db",
+        "backup_path": "data/backup/",
+        "backup_frequency": "daily",
+        "wal_mode": true
+    },
+
+    "logging": {
+        "level": "INFO",
+        "path": "data/logs/",
+        "max_size_mb": 10,
+        "backup_count": 5
+    },
+
+    "paths": {
+        "models": "models/",
+        "cache": "data/cache/",
+        "logs": "data/logs/",
+        "backup": "data/backup/",
+        "config": "config.json"
+    }
+}
