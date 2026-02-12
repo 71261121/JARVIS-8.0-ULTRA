@@ -42,6 +42,10 @@ FocusScreen {
     color: #c9d1d9;
 }
 
+.dashboard-container {
+    padding: 1 2;
+}
+
 .status-card {
     background: #161b22;
     border: solid #30363d;

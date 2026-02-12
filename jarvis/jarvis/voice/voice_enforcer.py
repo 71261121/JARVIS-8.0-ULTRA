@@ -678,7 +678,7 @@ class VoiceEnforcer:
                             )
                             self.voice.speak(message, personality)
 
-                except:
+                except Exception:
                     pass
 
             except Exception as e:

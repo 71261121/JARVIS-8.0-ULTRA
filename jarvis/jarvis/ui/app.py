@@ -429,7 +429,7 @@ class StudyScreen(Screen):
         """Select option C."""
         self._select_option("C")
     
-    def action_d(self) -> None:
+    def action_select_d(self) -> None:
         """Select option D."""
         self._select_option("D")
     

@@ -63,7 +63,7 @@ from jarvis.voice.voice_scheduler import VoiceScheduler
 
 from jarvis.content.study_plan import StudyPlanGenerator
 from jarvis.content.daily_target import DailyTargetManager
-from jarvis.content.mock_test import MockTestSystem
+from jarvis.content.mock_test import MockTestSystem, MockType
 from jarvis.content.milestone_tracker import MilestoneTracker
 
 
@@ -525,7 +525,7 @@ class JarvisOrchestrator:
                 "total_sessions": stats.total_sessions,
                 "total_questions": stats.total_questions,
                 "current_streak": stats.current_streak,
-                "accuracy": stats.total_questions / max(1, stats.total_questions)
+                "accuracy": stats.total_correct / max(1, stats.total_questions)
             })
             results["new_achievements"] = len(achievements)
             
