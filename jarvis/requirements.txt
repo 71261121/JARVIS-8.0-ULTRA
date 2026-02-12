@@ -1,0 +1,44 @@
+# JARVIS Dependencies - EXACT VERSIONS
+# =====================================
+# Reason: Version pinning ensures reproducible builds
+# Rollback: Delete virtualenv and recreate if dependency conflicts occur
+
+# === CORE FRAMEWORK ===
+textual==0.47.1          # TUI Framework - async, CSS styling, well-documented
+                         # Reason: Best TUI framework for Python, actively maintained
+                         # Alternative rejected: Rich (non-interactive), Curses (low-level)
+
+# === DATABASE ===
+# SQLite is built into Python, no external dependency needed
+# Reason: Single file, no server, perfect for mobile
+# aiosqlite for async operations
+aiosqlite==0.19.0        # Async SQLite wrapper
+                         # Reason: Textual is async, need async DB operations
+
+# === AI/ML ===
+# No Python ML dependencies - llama.cpp is standalone binary
+# Reason: Running model inference via subprocess to llama.cpp binary
+# This saves memory and is faster than Python ML frameworks on mobile
+
+# === UTILITIES ===
+python-dateutil==2.8.2   # Date/time utilities
+                         # Reason: SM-2 algorithm needs date calculations
+
+pydantic==2.5.3          # Data validation
+                         # Reason: Type-safe configuration, runtime validation
+
+# === TESTING ===
+pytest==7.4.3            # Testing framework
+pytest-asyncio==0.21.1   # Async test support
+
+# === LOGGING ===
+# Python's built-in logging is sufficient
+# No external dependency needed
+
+# === DEVELOPMENT ===
+black==23.12.1           # Code formatter (optional, for development)
+
+# =====================================
+# TOTAL DEPENDENCIES: 7 (minimal, deliberate)
+# Each dependency has a specific purpose
+# No unnecessary packages
