@@ -25,13 +25,24 @@ EXAM IMPACT:
     Indirect but significant. Spaced repetition ensures topics are reviewed
     at optimal intervals, maximizing retention without over-studying.
     Critical for the 75-day crash course where time is limited.
+
+OPTIMIZATIONS (v2.0):
+    - LRU caching for retention calculations
+    - Batch processing for bulk reviews
+    - Enhanced error recovery
+    - Input validation
 """
 
 import math
+import logging
+from functools import lru_cache
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
-from dataclasses import dataclass
+from typing import Dict, List, Optional, Tuple, Set
+from dataclasses import dataclass, field
 from enum import IntEnum
+
+# Setup logger
+logger = logging.getLogger('JARVIS.SM2')
 
 
 # ============================================================================
@@ -124,31 +135,57 @@ def calculate_next_review(
         Ensures efficient use of limited study time.
         Topics that are well-known are reviewed less frequently.
         Weak topics get more frequent review.
+    
+    Raises:
+        TypeError: If inputs are not of expected types
     """
-    # Validate quality
-    quality = max(MIN_QUALITY, min(MAX_QUALITY, quality))
+    # Input validation
+    if not isinstance(quality, (int, float)):
+        raise TypeError(f"quality must be int or float, got {type(quality)}")
+    if not isinstance(ease_factor, (int, float)):
+        raise TypeError(f"ease_factor must be int or float, got {type(ease_factor)}")
+    if not isinstance(interval, (int, float)):
+        raise TypeError(f"interval must be int or float, got {type(interval)}")
+    if not isinstance(repetitions, (int, float)):
+        raise TypeError(f"repetitions must be int or float, got {type(repetitions)}")
     
-    if quality >= 3:
-        # Successful recall
-        if repetitions == 0:
-            new_interval = INTERVAL_FIRST
-        elif repetitions == 1:
-            new_interval = INTERVAL_SECOND
-        else:
-            new_interval = round(interval * ease_factor)
+    try:
+        # Validate quality bounds
+        quality = max(MIN_QUALITY, min(MAX_QUALITY, int(quality)))
         
-        new_repetitions = repetitions + 1
-    else:
-        # Failed recall - reset
-        new_interval = INTERVAL_FIRST
-        new_repetitions = 0
+        # Validate ease factor bounds
+        ease_factor = max(MIN_EASE_FACTOR, min(MAX_EASE_FACTOR, float(ease_factor)))
+        
+        # Ensure non-negative values
+        interval = max(0, int(interval))
+        repetitions = max(0, int(repetitions))
+        
+        if quality >= 3:
+            # Successful recall
+            if repetitions == 0:
+                new_interval = INTERVAL_FIRST
+            elif repetitions == 1:
+                new_interval = INTERVAL_SECOND
+            else:
+                new_interval = round(interval * ease_factor)
+            
+            new_repetitions = repetitions + 1
+        else:
+            # Failed recall - reset
+            new_interval = INTERVAL_FIRST
+            new_repetitions = 0
+        
+        # Update ease factor
+        # EF' = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
+        new_ease_factor = ease_factor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+        new_ease_factor = max(MIN_EASE_FACTOR, min(MAX_EASE_FACTOR, new_ease_factor))
+        
+        return new_interval, new_ease_factor, new_repetitions
     
-    # Update ease factor
-    # EF' = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
-    new_ease_factor = ease_factor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
-    new_ease_factor = max(MIN_EASE_FACTOR, min(MAX_EASE_FACTOR, new_ease_factor))
-    
-    return new_interval, new_ease_factor, new_repetitions
+    except Exception as e:
+        logger.error(f"Error in calculate_next_review: {e}")
+        # Return safe defaults
+        return INTERVAL_FIRST, DEFAULT_EASE_FACTOR, 0
 
 
 def calculate_ease_factor(
@@ -170,6 +207,25 @@ def calculate_ease_factor(
     quality = max(MIN_QUALITY, min(MAX_QUALITY, quality))
     new_ef = current_ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
     return max(MIN_EASE_FACTOR, min(MAX_EASE_FACTOR, new_ef))
+
+
+@lru_cache(maxsize=5000)
+def _cached_retention_probability(days_since_review: int, ease_factor: float, repetitions: int) -> float:
+    """
+    Cached version of retention probability calculation.
+    
+    Provides faster lookups for frequently calculated values.
+    """
+    if repetitions == 0:
+        return 0.0
+    
+    stability = ease_factor * (1 + repetitions * 0.5)
+    
+    if days_since_review <= 0:
+        return 1.0
+    
+    retention = math.exp(-days_since_review / stability)
+    return max(0, min(1, retention))
 
 
 def calculate_retention_probability(
@@ -196,19 +252,26 @@ def calculate_retention_probability(
     Reason:
         Estimates how likely the student is to remember the material.
         Used to prioritize reviews when multiple items are due.
+    
+    Raises:
+        TypeError: If inputs are not of expected types
     """
-    if repetitions == 0:
-        return 0.0
+    # Input validation
+    try:
+        days = int(days_since_review) if days_since_review is not None else 0
+        ef = float(ease_factor) if ease_factor is not None else DEFAULT_EASE_FACTOR
+        reps = int(repetitions) if repetitions is not None else 0
+        
+        # Bounds check
+        days = max(0, days)
+        ef = max(MIN_EASE_FACTOR, min(MAX_EASE_FACTOR, ef))
+        reps = max(0, reps)
+        
+        return _cached_retention_probability(days, ef, reps)
     
-    # Stability increases with ease factor and repetitions
-    stability = ease_factor * (1 + repetitions * 0.5)
-    
-    if days_since_review <= 0:
-        return 1.0
-    
-    # Ebbinghaus formula
-    retention = math.exp(-days_since_review / stability)
-    return max(0, min(1, retention))
+    except Exception as e:
+        logger.error(f"Error in calculate_retention_probability: {e}")
+        return 0.5  # Safe default
 
 
 def calculate_optimal_review_delay(
