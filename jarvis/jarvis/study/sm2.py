@@ -129,29 +129,29 @@ class SM2Result:
         }
 
 
-@dataclass(order=True)
+@dataclass
 class ReviewItem:
     """
     Item to be reviewed with SM-2 tracking.
     
-    Implements comparison for priority queue usage.
+    Implements comparison for priority queue usage via __lt__.
     """
-    # Sort key (computed from urgency)
-    _sort_key: float = field(default=0.0, compare=True)
-    
     # Item data
-    id: str = field(compare=False)
-    topic_id: str = field(compare=False)
-    subject_id: str = field(default="", compare=False)
-    ease_factor: float = field(default=DEFAULT_EASE_FACTOR, compare=False)
-    interval_days: int = field(default=0, compare=False)
-    repetitions: int = field(default=0, compare=False)
-    last_review_date: Optional[datetime] = field(default=None, compare=False)
-    next_review_date: Optional[datetime] = field(default=None, compare=False)
-    total_reviews: int = field(default=0, compare=False)
-    average_quality: float = field(default=0.0, compare=False)
-    difficulty_score: float = field(default=0.5, compare=False)  # 0=easy, 1=hard
-    tags: Set[str] = field(default_factory=set, compare=False)
+    id: str
+    topic_id: str
+    subject_id: str = ""
+    ease_factor: float = DEFAULT_EASE_FACTOR
+    interval_days: int = 0
+    repetitions: int = 0
+    last_review_date: Optional[datetime] = None
+    next_review_date: Optional[datetime] = None
+    total_reviews: int = 0
+    average_quality: float = 0.0
+    difficulty_score: float = 0.5  # 0=easy, 1=hard
+    tags: Set[str] = field(default_factory=set)
+    
+    # Sort key (computed from urgency)
+    _sort_key: float = field(default=0.0, repr=False)
     
     def __post_init__(self):
         """Compute sort key after initialization."""
@@ -169,6 +169,18 @@ class ReviewItem:
     def update_sort_key(self) -> None:
         """Update sort key after changes."""
         self._sort_key = -self._compute_urgency()
+    
+    def __lt__(self, other: 'ReviewItem') -> bool:
+        """Compare for sorting (lower sort_key = higher priority)."""
+        if not isinstance(other, ReviewItem):
+            return NotImplemented
+        return self._sort_key < other._sort_key
+    
+    def __le__(self, other: 'ReviewItem') -> bool:
+        """Compare for sorting."""
+        if not isinstance(other, ReviewItem):
+            return NotImplemented
+        return self._sort_key <= other._sort_key
     
     def get_retention(self) -> float:
         """Get current retention probability."""
