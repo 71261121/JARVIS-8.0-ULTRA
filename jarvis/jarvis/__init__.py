@@ -21,7 +21,7 @@ Author: JARVIS AI Research Team
 Version: 1.0.0
 """
 
-__version__ = "1.0.0"
+__version__ = "8.0.0"
 __author__ = "JARVIS AI Research Team"
 __target_exam__ = "Loyola Academy B.Sc CS 2025"
 
